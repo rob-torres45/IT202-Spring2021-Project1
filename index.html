@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, inital-scale = 1">
+    <title>Project 1 </title>
+  </head>
+  <style>
+      .header{
+          background-color: #E8175D;
+          color: white;
+          font-family: Arial, Helvetica, sans-serif;
+          padding: 10px;
+          font-size: 25px;
+        }
+
+        body{
+            margin: 0;
+            background-color: #474747;
+        }
+        h2{
+            font-family: Arial, Helvetica, sans-serif;
+            font-weight: bold;
+            font-size: 20px;
+        }
+        p{
+            font-size: 15px;
+        }
+
+        ul {
+          list-style-type: none;
+          margin: 0;
+          padding: 0;
+          overflow: hidden;
+          background-color: #363636;
+        }
+
+        li {
+          float: left;
+        }
+
+        li a {
+          display: block;
+          color: white;
+          text-align: center;
+          padding: 14px 16px;
+          text-decoration: none;
+          font-family: Arial, Helvetica, sans-serif;
+        }
+
+        li a:hover{
+          background-color: #111;
+        }
+
+  </style>
+  <body>
+    <div class = "header">
+        <h1>Welcome</h1>
+        <h2>Chicago City Owned Land Inventory</h2>
+        <p>Main Purpose Of This App Is To Allows Users To Search For Chicago City-Owned Land Inventory Data.<br>Simply Select Any Of The Options To Obtain Specific Data From Your Selected Choice.</p>
+      </div>
+
+      <ul>
+        <li><a class = "active" href = "#home">Home</a></li>
+        <li><a href = "#form">Form</a></li>
+        <li><a href = "#data">Data</a></li>
+        <li><a href = "#map">Map</a></li>
+        <li><a href = "about">About</a></li>
+      </ul>
+
+    <form id = "data">
+        <input list = "inventory" name = "inventory">
+        <datalist id = "inventory">
+            <option value = "Community Area Name">
+            <option value = "Pin">
+            <option value = "Address">
+            <option value = "Square Footage">
+        </datalist>
+        <input type = "submit">
+    </form>
+
+
+
+    <script>
+        let endpoint = "https://data.cityofchicago.org/resource/aksk-kvfp.json";
+        
+        document.querySelector("#search").addEventListener("click", (e) => {
+            // read the value of the field
+            let invent = document.querySelector("#inventory").value;
+            // construct the url
+            let url = endpoint + ""
+            // fetch and handle the response
+        });
+    </script>
+  </body>
+</html>
