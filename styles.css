@@ -1,84 +1,87 @@
-.header{
+.topnav{
+  background-color: #363636;
+  font-family: Arial, Helvetica, sans-serif;
+  color: white;
+  overflow: hidden;
+  text-align: left;
+  padding: 30px 20px;
+}
+.topnav:hover{
+  background-color: black;
+}
+
+.content{
     background-color: #E8175D;
     color: white;
     font-family: Arial, Helvetica, sans-serif;
     padding: 10px;
     font-size: 25px;
-    
-  }
+}
 
-  body{
-      margin: 0;
-      background-color: #474747;
-  }
-  h2{
-      font-family: Arial, Helvetica, sans-serif;
-      font-weight: bold;
-      font-size: 20px;
-  }
-  p{
-      font-size: 15px;
-      font-family: Arial, Helvetica, sans-serif;
-      color: white;
-      padding-left: 10px;
-      font-weight: bold;
-  }
-
-  ul {
-    list-style-type: none;
-    margin: 0;
-    padding: 0;
-    overflow: hidden;
-    background-color: #363636;
-  }
-
-  li {
-    float: left;
-  }
-
-  li a {
-    display: block;
+.title{
     color: white;
-    text-align: center;
-    padding: 14px 16px;
-    text-decoration: none;
     font-family: Arial, Helvetica, sans-serif;
-  }
+    font-weight: bold;
+    font-size: 40px;
+}
 
-  li a:hover{
-    background-color: #111;
-  }
+.name{
+  color:whitesmoke;
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 25px;
+}
 
-  .responsive {
-    max-width: 4%;
-    height: auto;
-  }
-
-  .card {
-    font-family: Arial, Helvetica, sans-serif;
-    font-size: 25px;
-    background-color: #A8A7A7;
-    box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
-    transition: 0.3s;
-    width: 40%;
-    padding: 20px;
-    margin: 30px;
-  }
-  
-  .card:hover {
-    box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
-  }
-  
-  .container {
-    padding: 5px 16px;
-  }
-
-  #map {
-    height: 100%;
-  }
-
-  html, body {
-    height: 100%;
+body{
     margin: 0;
-    padding: 0;
-  }
+    background-color: #E8175D;
+}
+
+h1,h2,h3{
+    font-family: Arial, Helvetica, sans-serif;
+    font-weight: bold;
+    font-size: 20px;
+}
+p{
+  font-size: 15px;
+  font-family: Arial, Helvetica, sans-serif;
+  color: white;
+  padding-left: 10px;
+  font-weight: bold;
+} 
+.responsive {
+  max-width: 3%;
+  height: auto;
+}
+
+.card {
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 25px;
+  background-color: #474747;
+  box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+  transition: 0.3s;
+  width: 40%;
+  padding: 20px;
+  margin: 30px;
+}
+  
+.card:hover {
+  box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
+}
+  
+.container {
+  padding: 5px 16px;
+}
+
+#map {
+  height: 100%;
+}
+
+html, 
+body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+.screen{
+  display: none;
+}
