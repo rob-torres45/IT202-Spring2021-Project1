@@ -5,38 +5,151 @@
     <meta name="viewport" content="width=device-width, inital-scale = 1">
     <title>Project 1</title>
     <link rel = "stylesheet" href = "styles.css">
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>
   </head>
   
   <body>
-    <ul>
-      <li><a class = "active" href = "IT202_Project1.html">Home</a></li>
-      <li><a href = "search.html">Search</a></li>
-      <li><a href = "results.html">Results</a></li>
-      <li><a href = "map.html">Map</a></li>
-      <li><a href = "about.html">About</a></li>
-    </ul>
+  <!---   Navigation Bar    -->
+    <div id = "topnav" class = "topnav">
+      <a data-screen ="home">Home</a>
+      <a data-screen ="search">Search</a>
+      <a data-screen ="results">Results</a>
+      <a data-screen ="map_screen">Map</a>
+      <a data-screen ="about">About</a>
+    </div>
 
-    <div class = "header">
-      <h1><img src = "/Users/robertotorres/Downloads/star.png" alt = "Chicago Star" class = "responsive">Welcome</h1>
+  <!---   Screens   -->
+    <div id = "content" class = "content">
+
+      <div class = "screen" id = "home">
+        <div id = "title" class = "title">Welcome</div>
         <hr color: white;>
-        <h2>Chicago City Owned Land Inventory</h2>
+        <h1>Chicago City Owned Land Inventory</h1>
         <p>Main Purpose Of This App Is To Allows Users To Search For Chicago City-Owned Land Inventory Data.<br>Simply Select Any Of The Options To Obtain Specific Data From Your Selected Choice.</b>
           <br><br>More Information Can Be Found About The Data At <a href = "https://dev.socrata.com/foundry/data.cityofchicago.org/aksk-kvfp" title = "Click Here!" target = "_blank">Visit Chicago Land Data</a> </br></br>
-           To Get Started, Navigate To The Search Screen, Make Your Selection And Search. You Can View A List Of The Results On The Results Screen As Well As View A Map Of The Results On The Map Screen. 
+          To Get Started, Navigate To The Search Screen, Make Your Selection And Search By Clicking Submit. To View The Results, Simply Click On "Results" On The Top Navigation Bar As Well As To View A Map Of The Results On The Map Screen. 
         </p>
       </div>
 
+      <div class = "screen" id = "search">
+        <div id = "title" class = "title">Search</div>
+        <hr color: white;>
+        <h1>Chicago City Owned Land Inventory</h1>
+        <p>Below Is A List Of ID Numbers Which Is A Unique Identifier Of The Record Located In The Underlying System.<br>
+          Either Type Or Scroll Looking For A Specific Identifier<br>
+        </p>
+        <form id = "data">
+          <select name = "id" id = "id">
+            <option></option>
+          </select>
+        </form>
+        <button id = "search">Submit</button>
+      </div>
+
+      <div class = "screen" id = "results">
+        <div id = "title" class = "title">Results</div>
+        <hr color: white;>
+        <h1>Chicago City Owned Land Inventory</h1>
+        <h2 class = "name">&emsp;ID#</h2>
+        <div class = "card">
+          <div class = "container">
+            <h2 class = "card-title"><b>Choose A Selection First To See Displayed Results Of Your Choice.</b></h2>
+          </div>
+        </div>
+      </div>
+
+      <div class = "screen" id = "map_screen">
+        <div id = "title" class = "title">Map</div>
+        <hr color: white;>
+        <h1>Chicago City Owned Land Inventory</h1>
+
+        <div id = "map"></div>
+        <p>Map Will Be Displayed Once Selection Is Made</p>
+        <script
+          src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDjHOxbOgKmNVrU_d0Y4o_HmWywzpxdkBo&callback=initMap"
+          async
+        ></script>
+
+      </div>
+
+      <div class = "screen" id = "about">
+        <div id = "title" class = "title">About</div>
+        <hr color: white;>
+        <p>Hello! My Name Is Roberto And This Is My First Single Page App That I Built For IT202</p>
+      </div>
+
+    </div>
 
     <script>
-        let endpoint = "https://data.cityofchicago.org/resource/aksk-kvfp.json";
-        
-        document.querySelector("#search").addEventListener("click", (e) => {
-            // read the value of the field
-            let invent = document.querySelector("#inventory").value;
-            // construct the url
-            let url = endpoint + ""
-            // fetch and handle the response
+      let endpoint = "https://data.cityofchicago.org/resource/aksk-kvfp.json";
+
+      fetch(endpoint)
+        .then( (response) => { return response.json() })
+        .then( (data) => {
+          for(let info of data) {
+            let opt = document.createElement("option");
+            opt.innerText = info.id;
+            document.querySelector("#id").append(opt);
+          }
+        })
+
+      document.querySelector("#search").addEventListener("click", (e) => {
+        // read the value of the field
+        let choice = document.querySelector("#id").value;
+        // construct url
+        let url = endpoint + "?id=" + choice;
+        // fetch and handle response
+        fetch(url)
+          .then((response) => {return response.json() })
+          .then((data) => {
+            for(let item of data){
+              let c = "ID Number: " + item["id"];
+              let p = "ID Number: " + item["id"] + "\nPin Number: " + item["pin"] + "\nCommunity Area Name: " + item["community_area_name"] + "\nAddress: " + item["address"] + "\nSquare Footage: " + item["sq_ft"];
+              document.querySelector("h2.name").innerText = c;
+              document.querySelector("h2.card-title").innerText = p;
+            }
+          })
         });
+
+      let navAnchors = document.querySelectorAll("div#topnav a");
+      document.querySelector("#home").style.display = "block";
+      navAnchors.forEach( (anchor) => {
+        anchor.addEventListener("click", (event) => {
+          document.querySelectorAll(".screen").forEach((screen) => {
+            screen.style.display = "none";
+          });
+          let screen = event.target.getAttribute("data-screen");
+          let targetScreen = document.querySelector("#" + screen);
+          targetScreen.style.display = "block";
+        })
+      })
+      
+      let map;
+
+      function initMap() {
+        const myHouse = { lat: 41.78124, lng: -87.80439}
+        const contentString = 
+          "<h1>Rob's House Coordinates</h1>" +
+          "<p><b>Coordinates:</b> <br> lat: 41.78124 <br> <t>lng: -87.80439</p>"
+      
+        map = new google.maps.Map(document.querySelector("#map"), {
+          center: myHouse,
+          zoom: 10,
+        });
+
+        let marker = new google.maps.Marker({
+          position: myHouse,
+          map: map,
+        });
+
+        let infowindow = new google.maps.InfoWindow({
+          content: contentString
+        });
+
+        marker.addListener("click", () => {
+          infowindow.open(map, marker);
+        });
+      }
     </script>
   </body>
 </html>
