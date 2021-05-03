@@ -1,7 +1,7 @@
 {
     "theme_color": "#E8175D",
     "background_color": "#E8175D",
-    "display": "standalone",
+    "display": "browser",
     "scope": "/",
     "start_url": "/",
     "name": "IT_Project1",
