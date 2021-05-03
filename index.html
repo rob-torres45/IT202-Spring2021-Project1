@@ -4,8 +4,11 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, inital-scale = 1">
     <title>Project 1</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
     <link rel = "stylesheet" href = "styles.css">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
     <script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>
+    <link rel = "manifest" href = "manifest.json">
   </head>
   
   <body>
@@ -20,9 +23,8 @@
 
   <!---   Screens   -->
     <div id = "content" class = "content">
-
       <div class = "screen" id = "home">
-        <div id = "title" class = "title">Welcome</div>
+        <div id = "title" class = "title"><i class = "fas fa-star" style="font-size: 35px;color: white"></i>  Welcome  <i class = "fas fa-star" style="font-size: 35px;color: white"></i></div>
         <hr color: white;>
         <h1>Chicago City Owned Land Inventory</h1>
         <p>Main Purpose Of This App Is To Allows Users To Search For Chicago City-Owned Land Inventory Data.<br>Simply Select Any Of The Options To Obtain Specific Data From Your Selected Choice.</b>
@@ -43,7 +45,8 @@
             <option></option>
           </select>
         </form>
-        <button id = "search">Submit</button>
+        <button id = "search" type="button" class="btn btn-light" style="padding: 1.5px">Submit</button>
+        <!-- <button id = "search">Submit</button> -->
       </div>
 
       <div class = "screen" id = "results">
@@ -81,6 +84,20 @@
     </div>
 
     <script>
+      if('serviceWorker' in navigator){
+          window.addEventListener('load', function(){
+              navigator.serviceWorker.register('./sw.js').then(function(registration) {
+                  // "use /sw.js if this doesnt work^^^"
+                  // Registration was successful
+                  console.log('ServiceWorker registration was succesfull!', registration.scope);
+              }, function(err){
+                  // Failed
+                  console.log('ServiceWorker registration fail!', err);
+              });
+          });
+      }
+    </script>
+    <script>
       let endpoint = "https://data.cityofchicago.org/resource/aksk-kvfp.json";
 
       fetch(endpoint)
@@ -105,6 +122,7 @@
             for(let item of data){
               let c = "ID Number: " + item["id"];
               let p = "ID Number: " + item["id"] + "\nPin Number: " + item["pin"] + "\nCommunity Area Name: " + item["community_area_name"] + "\nAddress: " + item["address"] + "\nSquare Footage: " + item["sq_ft"];
+              const idLocation = "{lat: " + item["latitude"] + ", " + "lng: " + item["longitude"] + "}";
               document.querySelector("h2.name").innerText = c;
               document.querySelector("h2.card-title").innerText = p;
             }
@@ -127,29 +145,58 @@
       let map;
 
       function initMap() {
-        const myHouse = { lat: 41.78124, lng: -87.80439}
-        const contentString = 
-          "<h1>Rob's House Coordinates</h1>" +
-          "<p><b>Coordinates:</b> <br> lat: 41.78124 <br> <t>lng: -87.80439</p>"
-      
+        const chicago = { lat: 41.8781, lng: -87.6298};
         map = new google.maps.Map(document.querySelector("#map"), {
-          center: myHouse,
+          center: chicago,
           zoom: 10,
         });
+        // read the value of the field
+        let choice = document.querySelector("#id").value;
+        // construct url
+        let url = endpoint + "?id=" + choice;
+        
+        // fetch("https://data.cityofchicago.org/resource/aksk-kvfp.json")
+        fetch(url)
+          .then((response) => {return response.json() })
+          .then((data) => {
+            for(let item of data){
+              let marker = new google.maps.Marker({
+                position: {lat: parseFloat(item.latitude), lng: parseFloat(item.longitude)},
+                map, map
+              });
+              console.log(item["latitude"] + "," + item["longitude"])
 
-        let marker = new google.maps.Marker({
-          position: myHouse,
-          map: map,
-        });
+              let infowindow = new google.maps.InfoWindow({
+                content: "ID Number: " + item["id"]
+              });
 
-        let infowindow = new google.maps.InfoWindow({
-          content: contentString
-        });
+              marker.addListener("click", () => {
+                console.log(item["latitude"] + "," + item["longitude"])
+                infowindow.open(map, marker);
+              });
 
-        marker.addListener("click", () => {
-          infowindow.open(map, marker);
-        });
+            }
+            }
+          )
       }
+
+        // fetch("https://data.cityofchicago.org/resource/aksk-kvfp.json")
+        //   .then((response) => {return response.json() })
+        //   .then ((data) => {
+        //     for(let item of data) {
+        //       let marker = new google.maps.Marker({
+        //         position: {lat: parseFloat(item.latitude), lng: parseFloat(item.longitude)},
+        //         map: map,
+        //       });
+
+        //       let infowindow = new google.maps.InfoWindow({
+        //         content: "ID Number: " + item["id"]
+        //       });
+
+        //       marker.addListener("click", () => {
+        //         infowindow.open(map, marker);
+        //       });
+      
     </script>
   </body>
 </html>
